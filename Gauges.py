@@ -46,7 +46,7 @@ def gauge(fname, percAuto=50, labels=('Red', 'Yellow', 'Green'), colors=('#00aa4
         #fig.savefig(fname, dpi=200)
         plt.savefig(fname)
     #plt.show()
-    return fig
+
 
 # AR = int(input('Enter the AR%: '))
 # fig = gauge(percAuto=AR, fname='test')

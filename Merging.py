@@ -81,7 +81,7 @@ text8 = '(Up to '+str(round(percRedHrs, 1))+'% of your total '+str(locale.format
 
 text9 = 'Our RPA experts will help '+company+' every step of the way!'
 
-fig = gauge(percAuto=float(AR), fname='test.png')
+gauge(percAuto=float(AR), fname='test.png')
 #fig.show()
 
 pdf = FPDF()
