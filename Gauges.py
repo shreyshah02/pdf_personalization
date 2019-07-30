@@ -5,10 +5,10 @@ import numpy as np
 import os, sys
 
 
-def gauge(percAuto = 50, labels=['Red', 'Yellow', 'Green'], colors='jet_r', arrow=1, title='', fname=False):
+def gauge(fname, percAuto=50, labels=('Red', 'Yellow', 'Green'), colors=('#00aa41', '#F1BE48', '#c70f2e'), arrow=1, title='' ):
     fig, ax = plt.subplots()
     N= len(labels)
-    ang_range = [(0, 54), (54, 90), (90, 180)]
+    ang_range = [(0, 90), (90, 126), (126, 180)]
     if isinstance(colors, str):
         cmap = cm.get_cmap(colors, N)
         cmap = cmap(np.arrange(N))
@@ -25,7 +25,7 @@ def gauge(percAuto = 50, labels=['Red', 'Yellow', 'Green'], colors='jet_r', arro
 
     r = Rectangle((-0.4, -0.1,), 0.8, 0.1, facecolor='b', lw =2)
     ax.add_patch(r)
-    ax.text(0, -0.05, title, horizontalalignment='center', verticalalignment='center', fontsize=22, fontweight='bold')
+    ax.text(0, -0.05, percAuto, horizontalalignment='center', verticalalignment='center', fontsize=22, fontweight='bold')
 
     pos = (100 - percAuto)/100 * 180
     ax.arrow(0, 0, 0.225*np.cos(np.radians(pos)), 0.225*np.sin(np.radians(pos)), width=0.04, head_width=0.09,
@@ -45,5 +45,5 @@ def gauge(percAuto = 50, labels=['Red', 'Yellow', 'Green'], colors='jet_r', arro
     return fig
 
 
-fig = gauge(percAuto=20, colors=['#00aa41', '#F1BE48', '#c70f2e'], title='86%', fname='test.png')
+fig = gauge(percAuto=20, fname='test.png')
 fig.show()
