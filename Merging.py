@@ -1,6 +1,8 @@
 from fpdf import FPDF
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import locale
+from Gauges import gauge
+import os
 
 
 def HBB(hrsRecMnth, accRecMnth, perAutoRec, accEmp):
@@ -30,6 +32,7 @@ def avgDays(industry_type):
     elif industry_type == 'Healthcare':
         Avg_days = '10'
     return Avg_days
+
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 # name=input("Enter name: ")
@@ -78,6 +81,9 @@ text8 = '(Up to '+str(round(percRedHrs, 1))+'% of your total '+str(locale.format
 
 text9 = 'Our RPA experts will help '+company+' every step of the way!'
 
+fig = gauge(percAuto=float(AR), fname='test.png')
+#fig.show()
+
 pdf = FPDF()
 pdf.add_font('Rubik-M', '', r'C:\Windows\Fonts\Rubik-Medium.ttf', True)
 pdf.add_font('Rubik-L', '', r'C:\Windows\Fonts\Rubik-Light.ttf', True)
@@ -119,9 +125,17 @@ pdf.set_font('Rubik-M', size=32)
 pdf.set_text_color(0, 199, 177)
 pdf.cell(88.9, 11.557, txt=potential.upper(), align='C')
 
-pdf.rect(147, 160, 25, 15, 'FD')
-pdf.set_xy(150, 165)
-pdf.cell(20, 11.557, txt='Days', align='C')
+# pdf.rect(147, 160, 25, 15, 'FD')
+# pdf.set_xy(150, 165)
+# pdf.cell(20, 11.557, txt='Days', align='C')
+
+pdf.set_xy(150, 210)
+pdf.image('test.png',w=60, h=60, type='png')
+
+try:
+    os.remove('test.png')
+except:
+    pass
 
 pdf.add_page()
 # pdf.set_font('Rubik-M', size=37.35)
