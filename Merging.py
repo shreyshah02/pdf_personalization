@@ -37,7 +37,8 @@ def avgDays(industry_type):
 locale.setlocale(locale.LC_ALL, 'en_US')
 # name=input("Enter name: ")
 company = input("Enter Company Name: ")
-potential = input('Enter the potential: ')
+#potential = input('Enter the potential: ')
+
 days = input("Enter the no. of days required to complete your consolidated monthly financial reports: ")
 # Avg_days = input("Average days as per industry standards: ")
 
@@ -56,6 +57,14 @@ accEmp = int(input("How many employees are in your finance function globally? ")
 accRecMnth = int(input("Approximately how many account reconciliations does your organization perpare monthly? "))
 hrsRecMnth = int(input("Approximately how many staff hours does your organization spend preparing account "
                        "reconciliations each month? "))
+
+if int(days)>int(Avg_days) and float(AR)<50.0:
+    potential='Tremendous'
+elif int(days)>=int(Avg_days) or float(AR)<=50.0:
+    potential='High'
+else:
+    potential='Medium'
+
 perAutoRec = float(AR)/100
 
 Hbb_low, Hbb_high, percRedHrs, totalHrs = HBB(hrsRecMnth, accRecMnth, perAutoRec, accEmp)

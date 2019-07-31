@@ -63,7 +63,7 @@ def gauge_cycle(days, avgDays):
 
     fancybox = patches.FancyBboxPatch(xy, width=2, height=1, boxstyle='round', color=color,
                                       path_effects=[
-                                          path_effect.withSimplePatchShadow(offset=(-4, -4), shadow_rgbFace='k')])
+                                          path_effect.withSimplePatchShadow(offset=(4, -4), shadow_rgbFace='k')])
     ax.add_patch(fancybox)
     ax.set_frame_on(False)
     ax.axes.set_xticks([])
