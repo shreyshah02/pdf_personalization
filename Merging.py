@@ -1,7 +1,7 @@
 from fpdf import FPDF
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import locale
-from Gauges import gauge
+from Gauges import gauge, gauge_cycle
 import os
 
 
@@ -61,7 +61,7 @@ perAutoRec = float(AR)/100
 Hbb_low, Hbb_high, percRedHrs, totalHrs = HBB(hrsRecMnth, accRecMnth, perAutoRec, accEmp)
 
 # The text to be added
-text1 = 'The Future is Here, '+company+'!'
+# text1 = 'The Future of Work is Here, '+company
 
 text2 = company+'\nToday'
 
@@ -82,12 +82,14 @@ text8 = '(Up to '+str(round(percRedHrs, 1))+'% of your total '+str(locale.format
 text9 = 'Our RPA experts will help '+company+' every step of the way!'
 
 gauge(percAuto=float(AR), fname='test.png')
+gauge_cycle(days=int(days), avgDays=int(Avg_days) )
 #fig.show()
 
 pdf = FPDF()
 pdf.add_font('Rubik-M', '', r'C:\Windows\Fonts\Rubik-Medium.ttf', True)
 pdf.add_font('Rubik-L', '', r'C:\Windows\Fonts\Rubik-Light.ttf', True)
 pdf.add_font('Rubik-LI', '', r'C:\Windows\Fonts\Rubik-LightItalic.ttf', True )
+pdf.set_auto_page_break(True, margin=0.0)
 pdf.add_page()
 pdf.set_font("Rubik-M", size=36.86)
 pdf.set_text_color(1, 199, 177)
@@ -101,7 +103,7 @@ pdf.add_page()
 pdf.set_font("Rubik-M", size=32)
 pdf.set_text_color(0, 43, 73)
 pdf.set_xy(10, 36)
-pdf.cell(20, 20, txt=text1)
+# pdf.cell(20, 20, txt=text1)
 
 pdf.add_page()
 pdf.set_font("Rubik-M", size=37.35)
@@ -120,20 +122,24 @@ pdf.multi_cell(94, 5, txt=text4)
 pdf.set_xy(21.1, 252)
 pdf.multi_cell(94, 5, txt=text5)
 
-pdf.set_xy(127, 98)
+pdf.set_xy(125, 98)
 pdf.set_font('Rubik-M', size=32)
 pdf.set_text_color(0, 199, 177)
 pdf.cell(88.9, 11.557, txt=potential.upper(), align='C')
 
-# pdf.rect(147, 160, 25, 15, 'FD')
-# pdf.set_xy(150, 165)
-# pdf.cell(20, 11.557, txt='Days', align='C')
+pdf.set_xy(136, 145)
+pdf.image('gauge.png', w=70, h=60, type='png')
 
-pdf.set_xy(150, 210)
-pdf.image('test.png',w=60, h=60, type='png')
+pdf.set_xy(126, 170)
+pdf.set_text_color(0, 43, 73)
+pdf.cell(88.9, 11.557, txt=days+' Days', align='C')
+
+pdf.set_xy(136, 225)
+pdf.image('test.png',w=70, h=60, type='png')
 
 try:
     os.remove('test.png')
+    os.remove('gauge.png')
 except:
     pass
 
@@ -163,7 +169,7 @@ pdf.output("dynamic.pdf")
 
 output = PdfFileWriter()
 
-ipdf = PdfFileReader(open("PDF_template.pdf", 'rb'))
+ipdf = PdfFileReader(open("PDF_Template_Main.pdf", 'rb'))
 wpdf = PdfFileReader(open('dynamic.pdf', 'rb'))
 watermark1 = wpdf.getPage(0)
 watermark2 = wpdf.getPage(1)
@@ -205,5 +211,5 @@ output.addPage(page)
 
 output.addPage(ipdf.getPage(11))
 
-with open('Output_PDF_main.pdf', 'wb') as f:
+with open('Output_PDF_New.pdf', 'wb') as f:
     output.write(f)
