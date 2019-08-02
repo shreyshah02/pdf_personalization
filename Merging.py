@@ -1,9 +1,10 @@
 from fpdf import FPDF
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import locale
+import random
 from Gauges import gauge, gauge_cycle
 import os
-
+from pathlib import Path
 
 def HBB(hrsRecMnth, accRecMnth, perAutoRec, accEmp):
     Hbb_low = 4.8*hrsRecMnth + 2.4*accRecMnth*(1-perAutoRec)
@@ -36,13 +37,13 @@ def avgDays(industry_type):
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 # name=input("Enter name: ")
-company = input("Enter Company Name: ")
+company = "RGP"
 #potential = input('Enter the potential: ')
 
-days = input("Enter the no. of days required to complete your consolidated monthly financial reports: ")
+days = "5"
 # Avg_days = input("Average days as per industry standards: ")
 
-Industry_type = input('Enter the Industry type: ')
+Industry_type = "Services"
 Avg_days = avgDays(Industry_type)
 
 if int(days) < int(Avg_days):
@@ -52,11 +53,10 @@ elif int(days) > int(Avg_days):
 else:
     cycle_time = 'SAME as'
 
-AR = input("Enter % of accounts automatically reconciled: ")
-accEmp = int(input("How many employees are in your finance function globally? "))
-accRecMnth = int(input("Approximately how many account reconciliations does your organization perpare monthly? "))
-hrsRecMnth = int(input("Approximately how many staff hours does your organization spend preparing account "
-                       "reconciliations each month? "))
+AR = "30"
+accEmp = 200
+accRecMnth = 20
+hrsRecMnth = 200
 
 if int(days)>int(Avg_days) and float(AR)<50.0:
     potential='Tremendous'
@@ -85,24 +85,25 @@ text5 ='You indicated that about '+AR+'% of your accounts are currently automati
                                       'top performers can automate in excess of 50% of their reconciliation process.'
 
 text6 = company.upper()+'\nTOMORROW'
-text7 = str(locale.format('%d', round(int(Hbb_low), -1), grouping=True)) + ' - '+ str(locale.format('%d', round(int(Hbb_high), -1), grouping=True))
-text8 = '(Up to '+str(round(percRedHrs, 1))+'% of your total '+str(locale.format('%d', totalHrs, grouping=True))+' annual accounting hours!)'
+text7 = locale.format_string('%d', round(int(Hbb_low), -1), grouping=True) + ' - '+ locale.format_string('%d', round(int(Hbb_high), -1), grouping=True)
+text8 = '(Up to '+str(round(percRedHrs, 1))+'% of your total '+locale.format_string('%d', totalHrs, grouping=True)+' annual accounting hours!)'
 
 text9 = 'Our RPA experts will help '+company+' every step of the way!'
 
 gauge(percAuto=float(AR), fname='test.png')
 gauge_cycle(days=int(days), avgDays=int(Avg_days) )
 #fig.show()
-
+print('a')
 pdf = FPDF()
-pdf.add_font('Rubik-M', '', r'C:\Windows\Fonts\Rubik-Medium.ttf', True)
-pdf.add_font('Rubik-L', '', r'C:\Windows\Fonts\Rubik-Light.ttf', True)
-pdf.add_font('Rubik-LI', '', r'C:\Windows\Fonts\Rubik-LightItalic.ttf', True )
+pdf.add_font('Rubik-M', '', Path("../chat/pdf_personalization/Rubik/Rubik-Medium.ttf").resolve(), True)
+print('font')
+pdf.add_font('Rubik-L', '', Path("../chat/pdf_personalization/Rubik/Rubik-Light.ttf").resolve(), True)
+pdf.add_font('Rubik-LI', '', Path("../chat/pdf_personalization/Rubik/Rubik-LightItalic.ttf").resolve(), True )
 pdf.set_auto_page_break(True, margin=0.0)
 pdf.add_page()
 pdf.set_font("Rubik-M", size=36.86)
 pdf.set_text_color(1, 199, 177)
-
+print('b')
 # pdf.set_xy(25,106.5)
 # pdf.cell(1, 20, txt=name)
 pdf.set_xy(25, 226.5)
@@ -113,7 +114,7 @@ pdf.set_font("Rubik-M", size=32)
 pdf.set_text_color(0, 43, 73)
 pdf.set_xy(10, 36)
 # pdf.cell(20, 20, txt=text1)
-
+print('c')
 pdf.add_page()
 pdf.set_font("Rubik-M", size=37.35)
 pdf.set_text_color(0, 43, 73)
@@ -135,10 +136,8 @@ pdf.set_xy(125, 98)
 pdf.set_font('Rubik-M', size=32)
 pdf.set_text_color(0, 199, 177)
 pdf.cell(88.9, 11.557, txt=potential.upper(), align='C')
-
 pdf.set_xy(136, 145)
 pdf.image('gauge.png', w=70, h=60, type='png')
-
 pdf.set_xy(126, 170)
 pdf.set_text_color(0, 43, 73)
 pdf.cell(88.9, 11.557, txt=days+' Days', align='C')
@@ -174,7 +173,13 @@ pdf.set_text_color(0, 43, 73)
 pdf.set_xy(20, 126)
 pdf.cell(0, 11.557, txt=text9, align='C')
 
-pdf.output("dynamic.pdf")
+print('d')
+
+try:
+    pdf.output("dynamic.pdf")
+except Exception as e:
+    print(e)
+print('e')
 
 output = PdfFileWriter()
 
@@ -220,5 +225,8 @@ output.addPage(page)
 
 output.addPage(ipdf.getPage(11))
 
-with open('Output_PDF_New.pdf', 'wb') as f:
+file = './custom_pdfs/Output_PDF_New.pdf' + str(random.randint(10000,50000)) +'.pdf'
+with open(file, 'wb') as f:
     output.write(f)
+
+print(file)
